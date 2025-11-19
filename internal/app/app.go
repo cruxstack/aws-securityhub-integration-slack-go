@@ -46,7 +46,7 @@ func (a *App) Process(evt awsEvent.CloudWatchEvent) error {
 	if err != nil || !e.IsAlertable() {
 		return err
 	}
-	m0, m1 := e.SlackMessage(a.Config.AwsConsoleURL, a.Config.AwsAccessPortalURL, a.Config.AwsAccessRoleName)
+	m0, m1 := e.SlackMessage(a.Config.AwsConsoleURL, a.Config.AwsAccessPortalURL, a.Config.AwsAccessRoleName, a.Config.AWSSecurityHubv2Region)
 	_, _, err = a.SlackClient.PostMessage(a.Config.SlackChannel, m0, m1)
 	return err
 }

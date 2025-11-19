@@ -135,7 +135,7 @@ type ResourceTag struct {
 	Value string `json:"value"`
 }
 
-func (shf *SecurityHubV2Finding) SlackMessage(consoleURL, accessPortalURL, accessRoleName string) (slack.MsgOption, slack.MsgOption) {
+func (shf *SecurityHubV2Finding) SlackMessage(consoleURL, accessPortalURL, accessRoleName, shRegion string) (slack.MsgOption, slack.MsgOption) {
 	var blocks []slack.Block
 
 	severityEmoji := shf.GetSeverityEmoji()
@@ -192,7 +192,7 @@ func (shf *SecurityHubV2Finding) SlackMessage(consoleURL, accessPortalURL, acces
 		blocks = append(blocks, remediationSection)
 	}
 
-	consoleUrl := shf.BuildConsoleUrl(consoleURL, accessPortalURL, accessRoleName)
+	consoleUrl := shf.BuildConsoleUrl(consoleURL, accessPortalURL, accessRoleName, shRegion)
 	buttonSection := slack.NewActionBlock(
 		"actions",
 		slack.NewButtonBlockElement(
@@ -270,13 +270,30 @@ func (shf *SecurityHubV2Finding) GetSeverityEmoji() string {
 	}
 }
 
-func (shf *SecurityHubV2Finding) BuildConsoleUrl(consoleURL, accessPortalURL, accessRoleName string) string {
-	encodedId := url.QueryEscape(shf.FindingInfo.UID)
-	region := shf.Cloud.Region
+func (shf *SecurityHubV2Finding) BuildConsoleUrl(consoleURL, accessPortalURL, accessRoleName, shRegion string) string {
+	region := shRegion
+	if region == "" {
+		region = shf.Cloud.Region
+	}
 
+	var view string
+	findingType := shf.GetFindingCategory()
+
+	switch findingType {
+	case "Exposure":
+		view = "exposure"
+	case "Posture Management":
+		view = "postureManagement"
+	case "Threats":
+		view = "threats"
+	case "Vulnerabilities":
+		view = "vulnerabilities"
+	}
+
+	// https://883776786067-fwrss4sa.us-east-1.console.aws.amazon.com/securityhub/v2/home?region=us-east-1#/postureManagement?findingDetailId=b864b75ebfd1bf2a9c0353af5a446dd521ca0af231d56d671311494ecdcedbb8&detailPanelTabId=Resources
 	dst := fmt.Sprintf(
-		"%s/securityhub/home?region=%s#/findings?search=Id%%3D%%255Coperator%%255C%%253AEQUALS%%255C%%253A%s",
-		consoleURL, region, encodedId,
+		"%s/securityhub/v2/home?region=%s#/%s?findingDetailId=%s",
+		consoleURL, region, view, shf.Metadata.UID,
 	)
 
 	if accessPortalURL != "" && accessRoleName != "" {

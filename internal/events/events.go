@@ -6,5 +6,5 @@ import (
 
 type SecurityHubEvent interface {
 	IsAlertable() bool
-	SlackMessage(consoleURL, accessPortalURL, accessRoleName string) (slack.MsgOption, slack.MsgOption)
+	SlackMessage(consoleURL, accessPortalURL, accessRoleName, shRegion string) (slack.MsgOption, slack.MsgOption)
 }

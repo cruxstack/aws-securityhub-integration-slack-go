@@ -50,12 +50,13 @@ cd dist && zip deployment.zip bootstrap && cd ..
 
 ## Optional Environment Variables
 
-| name                        | example                                    | purpose                                                      | default                           |
-| --------------------------- | ------------------------------------------ | ------------------------------------------------------------ | --------------------------------- |
-| `APP_DEBUG_ENABLED`         | `true`                                     | verbose logging & event dump                                 | `false`                           |
-| `APP_AWS_CONSOLE_URL`       | `https://console.aws.amazon.com`           | base AWS console URL                                         | `https://console.aws.amazon.com`  |
-| `APP_AWS_ACCESS_PORTAL_URL` | `https://myorg.awsapps.com/start`          | AWS access portal URL (for federated access)                 | _(none - direct console links)_   |
-| `APP_AWS_ACCESS_ROLE_NAME`  | `SecurityAuditor`                          | IAM role name for access portal                              | _(none - direct console links)_   |
+| name                           | example                                    | purpose                                                      | default                           |
+| ------------------------------ | ------------------------------------------ | ------------------------------------------------------------ | --------------------------------- |
+| `APP_DEBUG_ENABLED`            | `true`                                     | verbose logging & event dump                                 | `false`                           |
+| `APP_AWS_CONSOLE_URL`          | `https://console.aws.amazon.com`           | base AWS console URL                                         | `https://console.aws.amazon.com`  |
+| `APP_AWS_ACCESS_PORTAL_URL`    | `https://myorg.awsapps.com/start`          | AWS access portal URL (for federated access)                 | _(none - direct console links)_   |
+| `APP_AWS_ACCESS_ROLE_NAME`     | `SecurityAuditor`                          | IAM role name for access portal                              | _(none - direct console links)_   |
+| `APP_AWS_SECURITYHUBV2_REGION` | `us-east-1`                                | AWS region for centralized SecurityHub v2 if applicable      | _(none - direct console links)_   |
 
 ## Create Lambda Function
 
